@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Dashboard - SurfTheTurf</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/images/favicon.ico"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo{
+            height: 50px;
+            padding-right: 15px;
+            padding-left: 5px;
+        }
+        .dashboard-card {
+            transition: transform 0.2s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-4 px-lg-5">
+            <div class="navbar-header">
+                <a class="navbar-brand" href=""><img src="../static/images/turflogo.png" class="img-responsive logo" alt=""></a>
+            </div>
+            <a class="navbar-brand" href="/">SurfTheTurf</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="explore">Explore</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="owner/dashboard">Dashboard</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item nav-link text-light">Welcome, {{ owner.business_name }}</li>
+                    <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4">
+                    <i class="bi bi-speedometer2"></i> Owner Dashboard
+                    {% if owner.is_verified %}
+                        <span class="badge bg-success ms-2">Verified</span>
+                    {% else %}
+                        <span class="badge bg-warning ms-2">Pending Verification</span>
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white dashboard-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4>{{ turfs.count }}</h4>
+                                <p class="mb-0">Total Turfs</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="bi bi-building fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white dashboard-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4>{{ turfs|length|add:"-1" }}</h4>
+                                <p class="mb-0">Active Turfs</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="bi bi-check-circle fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white dashboard-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4>{{ turfs|length|add:"-1" }}</h4>
+                                <p class="mb-0">Pending Review</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="bi bi-clock fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white dashboard-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4>0</h4>
+                                <p class="mb-0">Total Bookings</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="bi bi-calendar-check fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h4><i class="bi bi-lightning-charge"></i> Quick Actions</h4>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'add_turf' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Add New Turf
+                    </a>
+                    <a href="{% url 'explore_turfs' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-eye"></i> View Public Listing
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Turfs List -->
+        <div class="row">
+            <div class="col-12">
+                <h4><i class="bi bi-list-ul"></i> Your Turfs</h4>
+                
+                {% if turfs %}
+                    <div class="row">
+                        {% for turf in turfs %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card dashboard-card h-100">
+                                {% if turf.image1 %}
+                                    <img src="{{ turf.image1.url }}" class="card-img-top" alt="{{ turf.name }}" style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                        <i class="bi bi-image fs-1 text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ turf.name }}</h5>
+                                    <p class="card-text text-muted small">
+                                        <i class="bi bi-geo-alt"></i> {{ turf.get_location_display }}
+                                    </p>
+                                    <p class="card-text small">{{ turf.sports_available }}</p>
+                                    <p class="card-text">
+                                        <strong>₹{{ turf.price_per_hour }}/hour</strong>
+                                    </p>
+                                    
+                                    <div class="mb-2">
+                                        {% if turf.is_verified %}
+                                            <span class="badge bg-success status-badge">
+                                                <i class="bi bi-check-circle"></i> Verified
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning status-badge">
+                                                <i class="bi bi-clock"></i> Pending Review
+                                            </span>
+                                        {% endif %}
+                                        
+                                        {% if turf.is_active %}
+                                            <span class="badge bg-primary status-badge">
+                                                <i class="bi bi-play-circle"></i> Active
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary status-badge">
+                                                <i class="bi bi-pause-circle"></i> Inactive
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer bg-transparent">
+                                    <div class="btn-group w-100" role="group">
+                                        <a href="{% url 'edit_turf' turf.id %}" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </a>
+                                        {% if turf.is_verified %}
+                                            <a href="{% url 'dynamic_turf_details' turf.id %}" class="btn btn-outline-info btn-sm" target="_blank">
+                                                <i class="bi bi-eye"></i> View
+                                            </a>
+                                        {% endif %}
+                                        <a href="{% url 'delete_turf' turf.id %}" class="btn btn-outline-danger btn-sm" 
+                                           onclick="return confirm('Are you sure you want to delete this turf?')">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-building display-1 text-muted"></i>
+                        <h4 class="mt-3">No turfs added yet</h4>
+                        <p class="text-muted">Start by adding your first turf to begin receiving bookings.</p>
+                        <a href="{% url 'add_turf' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle"></i> Add Your First Turf
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark mt-5">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; PRAJYOT FULARII SurfTheTurf 2025</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

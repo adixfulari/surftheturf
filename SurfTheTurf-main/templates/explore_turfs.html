@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Explore Turfs - SurfTheTurf</title>
+        <!-- Favicon-->
+        <link rel="shortcut icon" type="image/jpg" href="../static/images/favicon.ico"/>
+        <link rel="icon" type="image/x-icon" href="#" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        <link href="../static/css/booking_style.css" rel="stylesheet" />
+        <style>
+            .logo{
+                height: 50px;
+                padding-right: 15px;
+                padding-left: 5px;
+              }
+            .dynamic-turf-badge {
+                background: linear-gradient(45deg, #28a745, #20c997);
+                color: white;
+                padding: 3px 8px;
+                border-radius: 12px;
+                font-size: 0.75rem;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container px-4 px-lg-5">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href=""><img src="../static/images/turflogo.png" class="img-responsive logo" alt=""></a>
+                </div>
+                <a class="navbar-brand" href="/">SurfTheTurf</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="book_now">BookNow</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="explore">Explore Turfs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="orderHistory">Order History</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item nav-link">Hello, {{user.username}}</li>
+                        <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="signup">SignUp</a></li>
+                        <li class="nav-item"><a class="nav-link" href="login">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Explore All Turfs in Pune!</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Discover amazing sports facilities across Pune - From established turfs to new community additions!</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Add Turf CTA for Owners -->
+        <div class="container-fluid bg-primary py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="text-white mb-0">🏟️ Own a turf? Join our community and reach more customers!</h5>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{% url 'owner_signup' %}" class="btn btn-light btn-sm me-2">Register as Owner</a>
+                        <a href="{% url 'owner_login' %}" class="btn btn-outline-light btn-sm">Owner Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    
+                    {% for turf in turfs %}
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            {% if turf.type == 'static' %}
+                                <img class="card-img-top" src="../static/images/{{ turf.id }}.{% if turf.id == 'turf1' %}jpeg{% else %}png{% endif %}" alt="{{ turf.name }}" />
+                            {% else %}
+                                {% if turf.turf_obj.image1 %}
+                                    <img class="card-img-top" src="{{ turf.turf_obj.image1.url }}" alt="{{ turf.name }}" style="height: 250px; object-fit: cover;" />
+                                {% else %}
+                                    <img class="card-img-top" src="../static/images/turf1.jpeg" alt="{{ turf.name }}" style="height: 250px; object-fit: cover;" />
+                                {% endif %}
+                            {% endif %}
+                            
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Dynamic turf badge -->
+                                    {% if turf.type == 'dynamic' %}
+                                        <span class="dynamic-turf-badge mb-2 d-inline-block">Community Listed</span>
+                                    {% endif %}
+                                    
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">{{ turf.name }}</h5>
+                                    <!-- Product address-->
+                                    <p class="mb-1">{{ turf.location }}</p>
+                                    <p class="mb-0 text-muted small">{{ turf.sports }}</p>
+                                    
+                                    {% if turf.type == 'dynamic' %}
+                                        <p class="mb-0 text-success small">₹{{ turf.turf_obj.price_per_hour }}/hour</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                {% if turf.type == 'static' %}
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-dark mt-auto" href="{{ turf.id }}_details">Book Now</a>
+                                    </div>
+                                {% else %}
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-success mt-auto" href="{% url 'dynamic_turf_details' turf.turf_obj.id %}">View & Book</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+                
+                {% if not turfs %}
+                <div class="text-center py-5">
+                    <h4>No turfs available at the moment</h4>
+                    <p>Be the first owner to list your turf!</p>
+                    <a href="{% url 'owner_signup' %}" class="btn btn-primary">Register as Owner</a>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        
+        <!-- Statistics Section -->
+        <section class="bg-light py-5">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-primary">{{ turfs|length }}</h3>
+                        <p>Total Turfs</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-success">8</h3>
+                        <p>Pune Areas</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-warning">5+</h3>
+                        <p>Sports Available</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="fw-bold text-info">24/7</h3>
+                        <p>Online Booking</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; PRAJYOT FULARII SurfTheTurf 2025</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+        <script src="../static/js/bookingpage.js"></script>
+    </body>
+</html>

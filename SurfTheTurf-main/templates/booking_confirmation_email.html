@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Booking Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .booking-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .detail-value {
+            color: #007bff;
+            font-weight: 500;
+        }
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .slots {
+            background-color: #e7f3ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .slot-item {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 2px;
+            font-size: 12px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .footer a {
+            color: #ffc107;
+            text-decoration: none;
+        }
+        .success-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏟️ Booking Confirmed!</h1>
+            <p>Your turf has been successfully booked</p>
+        </div>
+        
+        <div class="content">
+            <div class="success-badge">✅ Payment Successful</div>
+            
+            <h2>Hello {{ booking.name }}!</h2>
+            <p>Thank you for booking with <strong>SurfTheTurf</strong>. Your payment has been processed successfully and your turf is confirmed!</p>
+            
+            <div class="booking-details">
+                <h3 style="margin-top: 0; color: #007bff;">📋 Booking Details</h3>
+                
+                <div class="detail-row">
+                    <span class="detail-label">🏟️ Turf:</span>
+                    <span class="detail-value">Premium Sports Complex</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">📅 Date:</span>
+                    <span class="detail-value">{{ booking.selected_date }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">⏰ Booking Time:</span>
+                    <span class="detail-value">{{ booking.booking_time }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">📧 Email:</span>
+                    <span class="detail-value">{{ booking.email }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">💰 Total Amount:</span>
+                    <span class="detail-value amount">₹{{ booking.amount }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">💳 Payment ID:</span>
+                    <span class="detail-value">{{ booking.payment_id }}</span>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <strong class="detail-label">🕐 Booked Time Slots:</strong>
+                    <div class="slots">
+                        {% for slot in booking.slots %}
+                            <span class="slot-item">{{ slot }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 15px; margin: 20px 0;">
+                <h4 style="color: #856404; margin-top: 0;">📝 Important Instructions:</h4>
+                <ul style="color: #856404; margin-bottom: 0;">
+                    <li>Please arrive 10 minutes before your booked time</li>
+                    <li>Carry a valid ID proof for verification</li>
+                    <li>Contact the turf directly for any changes or queries</li>
+                    <li>Follow all safety guidelines and turf rules</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <p>Need help? Contact us at:</p>
+                <p><strong>📞 +91-XXXXX-XXXXX</strong> | <strong>📧 support@surftheturf.com</strong></p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for choosing <strong>SurfTheTurf</strong>!</p>
+            <p>Visit us at <a href="http://127.0.0.1:8000">www.surftheturf.com</a></p>
+            <p style="font-size: 12px; opacity: 0.8;">© 2025 PRAJYOT FULARII SurfTheTurf. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

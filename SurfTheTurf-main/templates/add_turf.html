@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Turf - SurfTheTurf</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/images/favicon.ico"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .logo{
+            height: 50px;
+            padding-right: 15px;
+            padding-left: 5px;
+        }
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .preview-image {
+            max-width: 200px;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-4 px-lg-5">
+            <div class="navbar-header">
+                <a class="navbar-brand" href=""><img src="../static/images/turflogo.png" class="img-responsive logo" alt=""></a>
+            </div>
+            <a class="navbar-brand" href="/">SurfTheTurf</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="explore">Explore</a></li>
+                    <li class="nav-item"><a class="nav-link" href="owner/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Add Turf</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-4">
+                    <a href="{% url 'owner_dashboard' %}" class="btn btn-outline-secondary me-3">
+                        <i class="bi bi-arrow-left"></i> Back to Dashboard
+                    </a>
+                    <h2><i class="bi bi-plus-circle"></i> Add New Turf</h2>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h4 class="mb-3"><i class="bi bi-info-circle"></i> Basic Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Turf Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                            <div class="form-text">Enter a catchy name for your turf</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location *</label>
+                            <select class="form-select" id="location" name="location" required>
+                                <option value="">Select location in Pune</option>
+                                <option value="kothrud">Kothrud</option>
+                                <option value="baner">Baner</option>
+                                <option value="wakad">Wakad</option>
+                                <option value="hinjewadi">Hinjewadi</option>
+                                <option value="viman_nagar">Viman Nagar</option>
+                                <option value="koregaon_park">Koregaon Park</option>
+                                <option value="magarpatta">Magarpatta</option>
+                                <option value="aundh">Aundh</option>
+                                <option value="hadapsar">Hadapsar</option>
+                                <option value="kharadi">Kharadi</option>
+                                <option value="wagholi">Wagholi</option>
+                                <option value="katraj">Katraj</option>
+                                <option value="warje">Warje</option>
+                                <option value="karve_nagar">Karve Nagar</option>
+                                <option value="deccan">Deccan</option>
+                                <option value="shivajinagar">Shivajinagar</option>
+                                <option value="camp">Camp</option>
+                                <option value="undri">Undri</option>
+                                <option value="kondhwa">Kondhwa</option>
+                                <option value="bibvewadi">Bibvewadi</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="address" class="form-label">Complete Address *</label>
+                    <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                    <div class="form-text">Provide the complete address including landmarks</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="sports_available" class="form-label">Sports Available *</label>
+                            <input type="text" class="form-control" id="sports_available" name="sports_available" required>
+                            <div class="form-text">e.g., Cricket, Football(7v7), Badminton</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="price_per_hour" class="form-label">Price per Hour (₹) *</label>
+                            <input type="number" class="form-control" id="price_per_hour" name="price_per_hour" min="100" max="10000" value="700" required>
+                            <div class="form-text">Pricing in Indian Rupees</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                    <div class="form-text">Describe your turf, facilities, and what makes it special</div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="form-section">
+                <h4 class="mb-3"><i class="bi bi-telephone"></i> Contact Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="contact_number" class="form-label">Contact Number *</label>
+                            <input type="tel" class="form-control" id="contact_number" name="contact_number" required>
+                            <div class="form-text">Primary contact number for bookings</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="form-text">Email for booking confirmations</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="map_link" class="form-label">Google Maps Link</label>
+                    <input type="url" class="form-control" id="map_link" name="map_link">
+                    <div class="form-text">Optional: Google Maps link for easy navigation</div>
+                </div>
+            </div>
+
+            <!-- Amenities -->
+            <div class="form-section">
+                <h4 class="mb-3"><i class="bi bi-grid"></i> Available Amenities</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="has_parking" name="has_parking" checked>
+                            <label class="form-check-label" for="has_parking">
+                                <i class="bi bi-car-front"></i> Parking Available
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="has_washroom" name="has_washroom" checked>
+                            <label class="form-check-label" for="has_washroom">
+                                <i class="bi bi-house"></i> Washroom
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="has_floodlights" name="has_floodlights" checked>
+                            <label class="form-check-label" for="has_floodlights">
+                                <i class="bi bi-lightbulb"></i> Floodlights
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="has_drinking_water" name="has_drinking_water" checked>
+                            <label class="form-check-label" for="has_drinking_water">
+                                <i class="bi bi-droplet"></i> Drinking Water
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="has_changing_room" name="has_changing_room">
+                            <label class="form-check-label" for="has_changing_room">
+                                <i class="bi bi-door-open"></i> Changing Room
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images -->
+            <div class="form-section">
+                <h4 class="mb-3"><i class="bi bi-images"></i> Turf Images</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="image1" class="form-label">Primary Image</label>
+                            <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
+                            <div class="form-text">Main image for your turf listing</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="image2" class="form-label">Additional Image 1</label>
+                            <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
+                            <div class="form-text">Optional additional image</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="image3" class="form-label">Additional Image 2</label>
+                            <input type="file" class="form-control" id="image3" name="image3" accept="image/*">
+                            <div class="form-text">Optional additional image</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="row mt-4 mb-5">
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-primary btn-lg me-3">
+                        <i class="bi bi-plus-circle"></i> Add Turf
+                    </button>
+                    <a href="{% url 'owner_dashboard' %}" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark mt-5">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; PRAJYOT FULARII SurfTheTurf 2025</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Image preview script -->
+    <script>
+        function previewImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let preview = document.getElementById(previewId);
+                    if (!preview) {
+                        preview = document.createElement('img');
+                        preview.id = previewId;
+                        preview.className = 'preview-image';
+                        input.parentNode.appendChild(preview);
+                    }
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Add event listeners for image previews
+        document.getElementById('image1').addEventListener('change', function() {
+            previewImage(this, 'preview1');
+        });
+        document.getElementById('image2').addEventListener('change', function() {
+            previewImage(this, 'preview2');
+        });
+        document.getElementById('image3').addEventListener('change', function() {
+            previewImage(this, 'preview3');
+        });
+    </script>
+</body>
+</html>

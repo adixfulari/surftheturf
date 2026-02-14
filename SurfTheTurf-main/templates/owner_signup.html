@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Registration - SurfTheTurf</title>
+    <link rel="shortcut icon" type="image/jpg" href="../static/images/favicon.ico"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/sign_up.css" rel="stylesheet" />
+    <style>
+        .logo{
+            height: 50px;
+            padding-right: 15px;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-4 px-lg-5">
+            <div class="navbar-header">
+                <a class="navbar-brand" href=""><img src="../static/images/turflogo.png" class="img-responsive logo" alt=""></a>
+            </div>
+            <a class="navbar-brand" href="/">SurfTheTurf</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="book_now">BookNow</a></li>
+                    <li class="nav-item"><a class="nav-link" href="explore">Explore</a></li>
+                    <li class="nav-item"><a class="nav-link" href="aboutus">AboutUs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contactus">ContactUs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="owner/login">Owner Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="text-center">Turf Owner Registration</h3>
+                        <p class="text-center mb-0">Join SurfTheTurf as a turf owner and list your sports facilities</p>
+                    </div>
+                    <div class="card-body">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">Username *</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="emailid" class="form-label">Email Address *</label>
+                                        <input type="email" class="form-control" id="emailid" name="emailid" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password *</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="phone_number" class="form-label">Phone Number *</label>
+                                        <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="business_name" class="form-label">Business Name *</label>
+                                <input type="text" class="form-control" id="business_name" name="business_name" required>
+                                <div class="form-text">Enter the name of your sports facility business</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Business Address *</label>
+                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                                <div class="form-text">Enter the complete address of your business</div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Register as Owner</button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <p>Already have an account? <a href="{% url 'owner_login' %}">Login here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark mt-5">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; PRAJYOT FULARII SurfTheTurf 2025</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
