@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: surftheturf
+    env: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn surftheturf.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: DJANGO_SETTINGS_MODULE
+        value: surftheturf.settings
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        sync: false
+        value: ""
+      - key: SECRET_KEY
+        sync: false
+        value: ""
+      - key: DATABASE_URL
+        sync: false
+        value: ""
