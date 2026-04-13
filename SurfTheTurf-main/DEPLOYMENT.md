@@ -40,9 +40,19 @@ Fill in the following details:
 | **Environment** | Python 3 |
 | **Region** | Choose closest to your users |
 | **Branch** | main |
-| **Build Command** | `./build.sh` |
+| **Build Command** | `pip install -r requirements.txt` |
 | **Start Command** | `gunicorn surftheturf.wsgi:application` |
 | **Plan** | Free (or Starter if you want better performance) |
+
+**Important:** Leave Build Command as shown above. Render will use the `Procfile`'s release phase to handle migrations and static file collection automatically.
+
+### What the Procfile Does
+
+The `Procfile` in your project includes:
+- **release phase:** Runs migrations and collects static files before each deployment
+- **web process:** Starts the Gunicorn server
+
+This ensures your database is up-to-date and static files are ready whenever you deploy.
 
 ## Step 5: Add Environment Variables
 
@@ -111,6 +121,18 @@ python manage.py collectstatic --noinput
 ```
 
 ## Troubleshooting
+
+### Issue: "Build failed - ./build.sh: No such file or directory"
+
+**Solution:** 
+1. Go to your Render dashboard
+2. Select your `surftheturf` service
+3. Click **Settings** → **Build & Deploy**
+4. Change the **Build Command** to: `pip install -r requirements.txt`
+5. Click **Save**
+6. Click **Manual Deploy** to redeploy
+
+The migrations will run automatically via the `Procfile` release phase.
 
 ### Issue: "Module not found" errors
 
